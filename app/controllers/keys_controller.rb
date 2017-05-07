@@ -154,10 +154,8 @@ class KeysController < ApplicationController
   end
 
   def find_keys
-    @keys=Vault::Key.find(params[:ids])
-    unless @keys.all? { |k| k.project_id == @project.id }
-      redirect_to project_keys_path(@project), notice: t('notice.keys.not_found')
-    end
+    @keys = Vault::Key.find(params[:ids])
+    render_404 unless @keys.all? { |k| k.project_id == @project.id }
   end
 
   def key_params

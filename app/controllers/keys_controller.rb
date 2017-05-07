@@ -145,16 +145,18 @@ class KeysController < ApplicationController
   private
 
   def find_key
-    @key=Vault::Key.find(params[:id])
+    @key = Vault::Key.find(params[:id])
     unless @key.project_id == @project.id
-      redirect_to project_keys_path(@project), notice: t('notice.keys.not_found') 
+      redirect_to project_keys_path(@project), notice: t('notice.keys.not_found')
     end
+  rescue ActiveRecord::RecordNotFound
+    render_404
   end
 
   def find_keys
     @keys=Vault::Key.find(params[:ids])
-    unless @keys.all? { |k| k.project_id == @project.id } 
-      redirect_to project_keys_path(@project), notice: t('notice.keys.not_found') 
+    unless @keys.all? { |k| k.project_id == @project.id }
+      redirect_to project_keys_path(@project), notice: t('notice.keys.not_found')
     end
   end
 
